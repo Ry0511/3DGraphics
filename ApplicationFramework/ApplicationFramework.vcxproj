@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Math\Camera.h" />
     <ClInclude Include="src\Math\Vec4.h" />
     <ClInclude Include="src\Util\Object3D.h" />
     <ClInclude Include="src\Util\Random.h" />
@@ -33,6 +34,7 @@
     <ClInclude Include="src\Math\Vec3.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Math\Camera.cpp" />
     <ClCompile Include="src\Util\Object3D.cpp" />
     <ClCompile Include="src\Util\Random.cpp" />
     <ClCompile Include="src\Input\InputManager.cpp" />

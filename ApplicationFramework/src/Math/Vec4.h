@@ -19,7 +19,7 @@ namespace GMath {
 		Vec4 normalise() const {
 			if (getW() != 0) {
 				const double w = getW();
-				return {getX() / w, getY() / w, getZ() / w, 1};
+				return {getX() / w, getY() / w, getZ() / w, w};
 			}
 			return *this;
 		};

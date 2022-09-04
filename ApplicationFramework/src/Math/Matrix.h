@@ -123,6 +123,23 @@ namespace GMath {
 		}};
 	}
 
+	static Mat4x4d newLookAtMatrix(const Vec3d& eye, const Vec3d& at, const Vec3d& up) {
+
+		// Inversion of the Point at Matrix
+		Vec3d z = (eye - at).normalise();
+		Vec3d x = z.crossProduct(up).normalise();
+		Vec3d y = x.crossProduct(z);
+
+		z = z.negate();
+
+		return {{
+			x.x, x.y, x.z, -x.dotProduct(eye),
+			y.x, y.y, y.z, -y.dotProduct(eye),
+			z.x, z.y, z.z, -z.dotProduct(eye),
+			0,     0,   0,  1
+		}};
+	}
+
 #pragma endregion
 
 }

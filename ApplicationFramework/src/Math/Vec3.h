@@ -11,10 +11,12 @@ namespace GMath {
 
 		T sum() const { return x + y + z; };
 		T magnitude() const { return (T)sqrt((x * x) + (y * y) + (z * z)); };
-		T dotProduct(const Vec3<T>& o) const { return (x * o.x) + (y * o.y) + (z * o.z); };
+		T dotProduct(const Vec3<T>& o) const { return x * o.x + y * o.y + z * o.z; };
 
 		Vec3<T> normalise() const {
 			const T m = this->magnitude();
+
+			if (m == 0) return *this;
 			return Vec3{x / m, y / m, z / m};
 		};
 
@@ -32,6 +34,13 @@ namespace GMath {
 		Vec3<T> div(const T v) const { return {x / v, y / v, z / v}; };
 		Vec3<T> operator/(const Vec3<T>& o) const { return div(o); };
 		Vec3<T> operator/(const T v) const { return div(v); };
+
+		Vec3<T> mul(const double s) const {
+			if (s == 0) return *this;
+			return {x * s, y * s, z * s};
+		};
+
+		Vec3<T> negate() const { return {-x, -y, -z}; };
 
 		Vec3<T> crossProduct(const Vec3<T>& o) const {
 			return {
