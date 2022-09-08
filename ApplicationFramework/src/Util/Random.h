@@ -18,7 +18,6 @@ namespace Util {
 
 		int getIntegral(const std::uniform_int_distribution<int>& dist);
 		double getReal(const std::uniform_real_distribution<double>& dist);
-
 	};
 }
 

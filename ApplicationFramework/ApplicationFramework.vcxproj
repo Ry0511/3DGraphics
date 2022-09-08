@@ -23,8 +23,6 @@
     <ClInclude Include="src\Math\Vec4.h" />
     <ClInclude Include="src\Util\Object3D.h" />
     <ClInclude Include="src\Util\Random.h" />
-    <ClInclude Include="src\Input\InputManager.h" />
-    <ClInclude Include="src\Input\ActionEvent.h" />
     <ClInclude Include="src\Core\Application.h" />
     <ClInclude Include="src\Math\Matrix.h" />
     <ClInclude Include="src\Math\Mesh.h" />
@@ -32,14 +30,14 @@
     <ClInclude Include="src\Math\Triangle.h" />
     <ClInclude Include="src\Math\Vec2.h" />
     <ClInclude Include="src\Math\Vec3.h" />
+    <ClInclude Include="src\Input\WindowState.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Math\Camera.cpp" />
     <ClCompile Include="src\Util\Object3D.cpp" />
     <ClCompile Include="src\Util\Random.cpp" />
-    <ClCompile Include="src\Input\InputManager.cpp" />
-    <ClCompile Include="src\Input\ActionEvent.cpp" />
     <ClCompile Include="src\Core\Application.cpp" />
+    <ClCompile Include="src\Input\WindowState.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

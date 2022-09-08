@@ -13,8 +13,8 @@ namespace GMath {
 
 	};
 
-	typedef Rect<int> Recti;
-	typedef Rect<float> Rectf;
-	typedef Rect<double> Rectd;
+	using Recti = Rect<int>;
+	using Rectf = Rect<float>;
+	using Rectd = Rect<double>;
 
 }

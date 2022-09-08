@@ -2,7 +2,7 @@
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
-#include "../Input/InputManager.h"
+#include "../Input/WindowState.h"
 #include "../Math/Vec2.h"
 #include "../Math/Vec3.h"
 #include "../Math/Rect.h"
@@ -16,7 +16,9 @@ namespace Core {
 
 	class Application {
 
+	private:
 		GLFWwindow* m_Handle = nullptr;
+		WindowState* m_WindowState = nullptr;
 
 	public:
 		Application(const uint16_t w, const uint16_t h, const char* title);
@@ -30,19 +32,30 @@ namespace Core {
 		//////////////////////////////////////////////////
 	public:
 		GLFWwindow* getWindow() const;
-		Vec2d getMousePos() const;
 		Recti getWindowBounds() const;
-		int getKeyState(const int key) const;
-		int getMouseState(const int button) const;
 		void setWindowTitle(const char* str) const;
 		void setWindowBounds(const Recti& bounds) const;
 
 		//////////////////////////////////////////////////
-		// Event Polling Operations
+		// Input Operations
 		//////////////////////////////////////////////////
 	public:
-		const bool hasInputEvent() const;
-		const ActionEvent& getInputEvent() const;
+		int getKeyState(const int key) const;
+		int getMouseState(const int button) const;
+
+		//////////////////////////////////////////////////
+		// Window Input Interface
+		//////////////////////////////////////////////////
+	public:
+		WindowState& getWindowInput() const;
+		const Vec2i& getWindowSize() const;
+		const Vec2i& getWindowPos() const;
+		const Vec2d& getMousePos() const;
+		const Vec2d getMouseVelocity(const Vec2d& sens) const;
+		const void setIsMouseLocked(const bool state);
+		const Vec2d getScrollVelocity(const Vec2d& sens) const;
+		const Input::Modifiers& getKeyboardModifiers() const;
+		const bool isModifierSet(const Input::Modifier mod) const;
 
 		//////////////////////////////////////////////////
 		// Virtual Interface Operations

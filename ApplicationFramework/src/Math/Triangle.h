@@ -4,6 +4,7 @@
 #include "Vec4.h"
 #include "Matrix.h"
 #include <array>
+#include <functional>
 
 namespace GMath {
 
@@ -25,6 +26,10 @@ namespace GMath {
 			GMath::Vec3d p2 = ((GMath::Vec4)(mvp * GMath::Vec4{vertices[2]})).normalise();
 
 			return {p0, p1, p2};
+		}
+
+		void forEach(const std::function<void(const Vec3d&)>& fn) {
+			for (const Vec3d& v : vertices) fn(v);
 		}
 	};
 }
