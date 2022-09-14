@@ -1,5 +1,7 @@
 #include "Object3D.h"
 
+#include <iostream>
+
 namespace Util {
 
 	//////////////////////////////////////////////////
@@ -13,11 +15,12 @@ namespace Util {
 
 	void Object3D::defaultTriRendererImpl(Triangle& tri, Vec3d& normal) {
 		// Light Position Assumed to be (0,0,-1)
-		const double dp = normal.dotProduct(Vec3d(0, -1, -1).normalise());
-		double v = std::max(0.2, dp);
+		const double dp = normal.dotProduct(Vec3d(0, 0, -1).normalise());
+		double v = std::max(0.1, dp);
 		glColor3d(v,v,v);
 		for (const auto& vec : tri.vertices) {
 			glVertex2d(vec.x, vec.y);
+			// glVertex3d(vec.x, vec.y, vec.z);
 		}
 	}
 

@@ -1,22 +1,22 @@
 
 #include "Core/Application.h"
-#include "Math/Camera.h"
+#include "Math/FirstPersonCamera.h"
 #include "Util/Random.h"
 #include "Util/Object3D.h"
 #include "Vec4.h"
+#include "Util/ObjFile.h"
 
 #include <iostream>
 #include <format>
 
 class App : public Core::Application {
 
+	GMath::FirstPersonCamera m_Camera{{0,0,-3}};
+
 	Util::Object3D m_Cube{GMath::SampleMesh::CUBE};
-	GMath::Camera m_Camera{{0,0,0}, {0,0,-1}, {0,1,0}};
+	Util::Object3D* m_Sphere = nullptr;
 
 	double theta = 0.0;
-
-	double yaw = -90;
-	double pitch = -0;
 
 public:
 
@@ -29,66 +29,49 @@ public:
 		m_Cube.setScale({0.5,0.5,0.5});
 		m_Cube.setRotate({0,0,0});
 
-		m_Cube.setVecPredicate([this](auto& tri, auto& normal) {
-			return normal.dotProduct(m_Camera.getAt().sub(tri[0])) < 0.0;
-		});
+		auto vectorPredicate = [this](auto& tri, auto& normal) {
+			return normal.dotProduct(m_Camera.getFront().sub(tri[0])) < 0.0;
+		};
+
+		m_Cube.setVecPredicate(vectorPredicate);
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glLineWidth(3);
+		glLineWidth(2);
+
+		Util::ObjFile file("resource/Sphere.obj");
+		m_Sphere = new Util::Object3D(GMath::Mesh(file.getTriangleMesh()));
+		m_Sphere->setVecPredicate(vectorPredicate);
+
+		m_Sphere->setTranslate({0,0,10});
+		m_Sphere->setScale({0.05,0.05,0.05});
+		m_Sphere->setRotate({0,0,0});
 	}
 
 	virtual bool onUpdate(const double ts) override {
 		// Rotate Model
 		theta += ts;
-		//m_Cube.setRotate({theta, theta * 0.7, ts * 1.5});
+		m_Sphere->setRotate({theta * 0.8, theta * 0.5, theta});
 
 		// Clear Screen
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// Mouse Input
-		if (getMouseState(GLFW_MOUSE_BUTTON_1)) {
-			App::setIsMouseLocked(true);
-
-			const GMath::Vec2d vel = getMouseVelocity({0.008, 0.008});
-
-			yaw += vel.x;
-			pitch += vel.y;
-
-			if (pitch > 89) pitch = 89;
-			if (pitch < -89) pitch = -89;
-
-			m_Camera.setPitch(pitch);
-			m_Camera.setYaw(yaw);
-			m_Camera.applyAngle();
-		} else {
-			App::setIsMouseLocked(false);
-		}
-
-		// Zooming in & out
-		if (getMouseState(GLFW_MOUSE_BUTTON_2)) {
-			GMath::Vec2d scroll = getWindowInput().getMouseScrollVelocity({0.2, 0.2});
-			m_Cube.setTranslate(m_Cube.getTranslate() + GMath::Vec3d{0, 0, scroll.y});
-		}
-
-		// Moving around
-		double speed = isModifierSet(Input::Modifier::SHIFT) ? 4 * ts : 2 * ts;
-		if (getKeyState(GLFW_KEY_W)) m_Camera.moveForward(speed);
-		if (getKeyState(GLFW_KEY_S)) m_Camera.moveBackward(speed);
-		if (getKeyState(GLFW_KEY_A)) m_Camera.moveLeft(speed);
-		if (getKeyState(GLFW_KEY_D)) m_Camera.moveRight(speed);
+		m_Camera.update(ts, this);
 
 		// Display Model
 		GMath::Recti bounds = getWindowBounds();
-		glLoadIdentity();
 		glViewport(0, 0, bounds.w, bounds.h);
 
 		// Transforms
 		auto proj = GMath::newProjectionMatrix(bounds.w, bounds.h, 90);
-		auto cam = m_Camera.getViewMatrix(GMath::CameraMode::FIRST_PERSON);
-		auto cube = m_Cube.getViewMatrix();
+		auto cam = m_Camera.getViewMatrix();
 
-		GMath::Mat4x4d mvp = proj * cube * cam;
+		// Cube
+		GMath::Mat4x4d mvp = proj * cam * m_Cube.getViewMatrix();
 		m_Cube.render(mvp);
+
+		// Sphere
+		mvp = proj * cam * m_Sphere->getViewMatrix();
+		m_Sphere->render(mvp);
 
 		return true;
 	}

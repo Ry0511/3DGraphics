@@ -58,6 +58,18 @@ namespace GMath {
 			};
 		}
 
+		Vec3<T> interserctPlane(const Vec3<T>& p, const Vec3<T>& n,
+								const Vec3<T>& start, const Vec3<T>& end) const {
+			// Assumes n is normalised
+			const double d = n.dotProduct(p).negate();
+			const double ad = start.dotProduct(n);
+			const double bd = end.dotProduct(n);
+			const double t = (-d - ad) / (bd - ad);
+			const Vec3<T> se = end.sub(start);
+			const Vec3<T> intersect = se.mul(t);
+			return start.add(intersect);
+		};
+
 		std::string toString() const {
 			return std::format("Vec3({0}, {1}, {2})", x, y, z);
 		}
